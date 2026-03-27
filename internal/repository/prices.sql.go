@@ -67,9 +67,9 @@ ORDER BY date ASC
 `
 
 type GetDailyPricesBySymbolAndDateRangeParams struct {
-	Symbol string
-	Date   time.Time
-	Date_2 time.Time
+	Symbol    string
+	StartDate time.Time
+	EndDate   time.Time
 }
 
 type GetDailyPricesBySymbolAndDateRangeRow struct {
@@ -83,7 +83,7 @@ type GetDailyPricesBySymbolAndDateRangeRow struct {
 }
 
 func (q *Queries) GetDailyPricesBySymbolAndDateRange(ctx context.Context, arg GetDailyPricesBySymbolAndDateRangeParams) ([]GetDailyPricesBySymbolAndDateRangeRow, error) {
-	rows, err := q.db.Query(ctx, getDailyPricesBySymbolAndDateRange, arg.Symbol, arg.Date, arg.Date_2)
+	rows, err := q.db.Query(ctx, getDailyPricesBySymbolAndDateRange, arg.Symbol, arg.StartDate, arg.EndDate)
 	if err != nil {
 		return nil, err
 	}

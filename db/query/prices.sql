@@ -7,9 +7,9 @@ ORDER BY date ASC;
 -- name: GetDailyPricesBySymbolAndDateRange :many
 SELECT symbol, date, open, high, low, close, volume
 FROM daily_prices
-WHERE symbol = $1
-  AND date >= $2
-  AND date <= $3
+WHERE symbol = @symbol
+  AND date >= @start_date
+  AND date <= @end_date
 ORDER BY date ASC;
 
 -- name: UpsertDailyPrice :exec
