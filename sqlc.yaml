@@ -13,7 +13,7 @@ sql:
             go_type:
               import: "time"
               type: "Time"
-          - db_type: "timestamp"
+          - db_type: "timestamptz"
             nullable: false
             go_type:
               import: "time"
