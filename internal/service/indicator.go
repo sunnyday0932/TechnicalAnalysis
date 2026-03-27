@@ -44,6 +44,13 @@ func (s *IndicatorService) Compute(ctx context.Context, symbol, indicatorType st
 		return IndicatorResult{}, fmt.Errorf("no price data for symbol %q", symbol)
 	}
 
+	switch indicatorType {
+	case "ma", "ema", "rsi", "kd", "bb":
+		if period <= 0 {
+			return IndicatorResult{}, fmt.Errorf("period must be positive, got %d", period)
+		}
+	}
+
 	var data any
 	switch indicatorType {
 	case "ma":
