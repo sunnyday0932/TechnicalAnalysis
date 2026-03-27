@@ -8,6 +8,7 @@ sql:
         package: "repository"
         out: "internal/repository"
         sql_package: "pgx/v5"
+        emit_interface: true
         overrides:
           - db_type: "date"
             go_type:
