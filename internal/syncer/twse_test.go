@@ -12,7 +12,7 @@ import (
 func TestTWSEFetcher_ParsesResponse(t *testing.T) {
 	sample := []map[string]string{
 		{
-			"Date":         "20250326",
+			"Date":         "1140326", // ROC 114 = 2025
 			"Code":         "2330",
 			"Name":         "台積電",
 			"TradeVolume":  "23,456,789",

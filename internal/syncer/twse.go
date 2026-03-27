@@ -53,6 +53,19 @@ type twseRecord struct {
 	ClosingPrice string `json:"ClosingPrice"`
 }
 
+// parseTWSEDate converts "YYYMMDD" (ROC year, e.g. "1150326") to time.Time.
+func parseTWSEDate(s string) (time.Time, error) {
+	if len(s) != 7 {
+		return time.Time{}, fmt.Errorf("invalid TWSE date: %s", s)
+	}
+	rocYear, err := strconv.Atoi(s[:3])
+	if err != nil {
+		return time.Time{}, err
+	}
+	western := fmt.Sprintf("%d%s", rocYear+1911, s[3:])
+	return time.Parse("20060102", western)
+}
+
 // FetchAll fetches all listed stocks' latest daily data from TWSE.
 func (f *TWSEFetcher) FetchAll() ([]StockRecord, error) {
 	resp, err := f.client.Get(f.url)
@@ -73,7 +86,7 @@ func (f *TWSEFetcher) FetchAll() ([]StockRecord, error) {
 
 	records := make([]StockRecord, 0, len(raw))
 	for _, r := range raw {
-		date, err := time.Parse("20060102", r.Date)
+		date, err := parseTWSEDate(r.Date)
 		if err != nil {
 			continue
 		}
