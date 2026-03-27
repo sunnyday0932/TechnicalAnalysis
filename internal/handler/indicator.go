@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -49,40 +50,58 @@ func (h *IndicatorHandler) GetIndicator(c *gin.Context) {
 		return
 	}
 
+	data, err := toIndicatorData(indicatorType, result.Data)
+	if err != nil {
+		respondError(c, http.StatusInternalServerError, err.Error())
+		return
+	}
 	respondOK(c, IndicatorResponse{
 		Symbol:    result.Symbol,
 		Name:      result.Name,
 		Indicator: result.Indicator,
 		Period:    result.Period,
-		Data:      toIndicatorData(indicatorType, result.Data),
+		Data:      data,
 	})
 }
 
 // toIndicatorData converts indicator results to JSON-serialisable response types.
-func toIndicatorData(indicatorType string, data any) any {
+func toIndicatorData(indicatorType string, data any) (any, error) {
 	switch indicatorType {
 	case "macd":
-		r := data.(indicator.MACDResult)
+		r, ok := data.(indicator.MACDResult)
+		if !ok {
+			return nil, fmt.Errorf("unexpected data type for macd")
+		}
 		return MACDDataResponse{
 			DIF:       toDataPointResponses(r.DIF),
 			Signal:    toDataPointResponses(r.Signal),
 			Histogram: toDataPointResponses(r.Histogram),
-		}
+		}, nil
 	case "kd":
-		r := data.(indicator.KDResult)
+		r, ok := data.(indicator.KDResult)
+		if !ok {
+			return nil, fmt.Errorf("unexpected data type for kd")
+		}
 		return KDDataResponse{
 			K: toDataPointResponses(r.K),
 			D: toDataPointResponses(r.D),
-		}
+		}, nil
 	case "bb":
-		r := data.(indicator.BBResult)
+		r, ok := data.(indicator.BBResult)
+		if !ok {
+			return nil, fmt.Errorf("unexpected data type for bb")
+		}
 		return BBDataResponse{
 			Upper: toDataPointResponses(r.Upper),
 			Mid:   toDataPointResponses(r.Mid),
 			Lower: toDataPointResponses(r.Lower),
-		}
+		}, nil
 	default:
-		return toDataPointResponses(data.([]indicator.DataPoint))
+		pts, ok := data.([]indicator.DataPoint)
+		if !ok {
+			return nil, fmt.Errorf("unexpected data type for %s", indicatorType)
+		}
+		return toDataPointResponses(pts), nil
 	}
 }
 

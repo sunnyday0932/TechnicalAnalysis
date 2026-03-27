@@ -31,7 +31,7 @@ func (s *SyncService) TriggerSymbolSync(ctx context.Context, symbol string) erro
 	if err != nil {
 		return fmt.Errorf("symbol %q not found", symbol)
 	}
-	go s.syncer.SyncAll(ctx, "manual-"+symbol)
+	go s.syncer.SyncAllWithRetry("manual-" + symbol)
 	return nil
 }
 
