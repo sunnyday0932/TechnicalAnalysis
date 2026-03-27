@@ -3,6 +3,9 @@ package indicator
 // MACD 使用 EMA(12)、EMA(26)、Signal EMA(9) 計算 MACD 指標。
 // 三條結果序列長度均等於 prices 長度。
 func MACD(prices []Price) MACDResult {
+	if len(prices) == 0 {
+		return MACDResult{}
+	}
 	ema12 := EMA(prices, 12)
 	ema26 := EMA(prices, 26)
 

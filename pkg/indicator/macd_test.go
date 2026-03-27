@@ -30,6 +30,13 @@ func TestMACD_Length(t *testing.T) {
 	}
 }
 
+func TestMACD_Empty(t *testing.T) {
+	result := indicator.MACD([]indicator.Price{})
+	if result.DIF != nil || result.Signal != nil || result.Histogram != nil {
+		t.Error("expected empty MACDResult for empty input")
+	}
+}
+
 func TestMACD_HistogramEquality(t *testing.T) {
 	closes := make([]float64, 30)
 	for i := range closes {

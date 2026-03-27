@@ -38,11 +38,11 @@ func TestKD_FirstValue(t *testing.T) {
 	if len(result.K) != 1 {
 		t.Fatalf("expected 1 K value, got %d", len(result.K))
 	}
-	wantK := 50.0*2/3 + 75.0*1/3
+	wantK := 50.0*(2.0/3.0) + 75.0*(1.0/3.0)
 	if absFloat(result.K[0].Value-wantK) > 0.01 {
 		t.Errorf("K: expected %.4f, got %.4f", wantK, result.K[0].Value)
 	}
-	wantD := 50.0*2/3 + wantK*1/3
+	wantD := 50.0*(2.0/3.0) + wantK*(1.0/3.0)
 	if absFloat(result.D[0].Value-wantD) > 0.01 {
 		t.Errorf("D: expected %.4f, got %.4f", wantD, result.D[0].Value)
 	}

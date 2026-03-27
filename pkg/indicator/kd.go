@@ -25,8 +25,8 @@ func KD(prices []Price, period int) KDResult {
 		if highest != lowest {
 			rsv = (prices[i].Close - lowest) / (highest - lowest) * 100
 		}
-		k = k*2/3 + rsv*1/3
-		d = d*2/3 + k*1/3
+		k = k*(2.0/3.0) + rsv*(1.0/3.0)
+		d = d*(2.0/3.0) + k*(1.0/3.0)
 		kValues = append(kValues, DataPoint{Date: prices[i].Date, Value: k})
 		dValues = append(dValues, DataPoint{Date: prices[i].Date, Value: d})
 	}
